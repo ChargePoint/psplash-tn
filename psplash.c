@@ -21,6 +21,10 @@
 #include "psplash.h"
 #include "font.h"
 
+#ifdef HAVE_SYSTEMD
+#include <systemd/sd-daemon.h>
+#endif
+
 #define SPLIT_LINE_POS(fb)                                                         \
 	((fb)->height - ((config.img_split_denominator - config.img_split_numerator) * \
 					 (fb)->height / config.img_split_denominator))
@@ -473,6 +477,10 @@ int main(int argc, char **argv)
 		ret = -1;
 		goto fb_fail;
 	}
+
+#ifdef HAVE_SYSTEMD
+    sd_notify(0, "READY=1");
+#endif
 
 	/* Clear the background with background color */
 	psplash_fb_draw_rect(fb, 0, 0, fb->width, fb->height, config.colors.background);

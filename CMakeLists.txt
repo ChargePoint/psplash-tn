@@ -6,6 +6,7 @@ INCLUDE(CheckFunctionExists)
 OPTION(ENABLE_PNG "Enable support for PNG loading" ON)
 OPTION(ENABLE_JPEG "Enable support for JPEG loading" OFF)
 OPTION(ENABLE_ALIVE_GIF "Enable alive GIF animation support" OFF)
+OPTION(ENABLE_SYSTEMD "Enable systemd init system support" OFF)
 
 SET(CMAKE_SHARED_LIBRARY_LINK_C_FLAGS "")
 
@@ -61,9 +62,24 @@ FIND_LIBRARY(ubox NAMES ubox)
 FIND_PATH(ubox_include_dir libubox/ulog.h)
 INCLUDE_DIRECTORIES(${ubox_include_dir})
 
+IF(ENABLE_SYSTEMD)
+    SET(LIBS ${LIBS} systemd)
+    ADD_DEFINITIONS(-DHAVE_SYSTEMD=1)
+	ADD_EXECUTABLE(psplash-systemd psplash-systemd.c)
+	SET_TARGET_PROPERTIES(psplash-systemd PROPERTIES OUTPUT_NAME psplash-systemd)
+	TARGET_LINK_LIBRARIES(psplash-systemd systemd)
+
+	# Install systemd service files
+	INSTALL(FILES systemd/psplash-systemd.service systemd/psplash-start.service
+			DESTINATION /usr/lib/systemd/system)
+ENDIF()
+
 ADD_EXECUTABLE(psplash ${PSPLASH_SOURCES})
 SET_TARGET_PROPERTIES(psplash PROPERTIES OUTPUT_NAME psplash)
 TARGET_LINK_LIBRARIES(psplash ${LIBS})
+IF(ENABLE_SYSTEMD)
+    TARGET_LINK_LIBRARIES(psplash systemd)
+ENDIF()
 
 ADD_EXECUTABLE(psplash-write ${PSPLASH_WRITE_SOURCES})
 SET_TARGET_PROPERTIES(psplash-write PROPERTIES OUTPUT_NAME psplash-write)
