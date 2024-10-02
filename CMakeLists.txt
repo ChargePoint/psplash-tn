@@ -15,8 +15,6 @@ PROJECT(psplash C)
 ADD_DEFINITIONS(-Wall -Wextra)
 ADD_DEFINITIONS(-D_GNU_SOURCE)
 
-SET(LIBS uci ubox)
-
 SET(PSPLASH_SOURCES
 	psplash.c
 	psplash-console.c
@@ -57,10 +55,12 @@ ENDIF()
 FIND_LIBRARY(uci NAMES uci)
 FIND_PATH(uci_include_dir uci.h)
 INCLUDE_DIRECTORIES(${uci_include_dir})
+SET(LIBS ${LIBS} uci)
 
 FIND_LIBRARY(ubox NAMES ubox)
 FIND_PATH(ubox_include_dir libubox/ulog.h)
 INCLUDE_DIRECTORIES(${ubox_include_dir})
+SET(LIBS ${LIBS} ubox)
 
 IF(ENABLE_SYSTEMD)
     SET(LIBS ${LIBS} systemd)
@@ -89,3 +89,6 @@ INSTALL(TARGETS psplash psplash-write
 	LIBRARY DESTINATION lib
 	RUNTIME DESTINATION bin
 )
+
+# Install resources
+INSTALL(DIRECTORY resources/ DESTINATION /usr/share/psplash)

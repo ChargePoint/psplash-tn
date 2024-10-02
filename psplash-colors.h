@@ -20,21 +20,33 @@
 #define _HAVE_PSPLASH_COLORS_H
 
 /* This is the overall background color */
+#ifndef PSPLASH_BACKGROUND_COLOR
 #define PSPLASH_BACKGROUND_COLOR 0x00, 0x00, 0x00
+#endif
 
 /* This is the color of any text output */
+#ifndef PSPLASH_TEXT_COLOR
 #define PSPLASH_TEXT_COLOR 0xbb, 0xbb, 0xbb
+#endif
 
 /* This is the color of the progress bar indicator */
+#ifndef PSPLASH_BAR_COLOR
 #define PSPLASH_BAR_COLOR 0x88, 0x88, 0x88
+#endif
 
 /* This is the color of the progress bar background */
+#ifndef PSPLASH_BAR_BACKGROUND_COLOR
 #define PSPLASH_BAR_BACKGROUND_COLOR 0x44, 0x44, 0x44
+#endif
 
 /* This is the color of the progress bar border */
+#ifndef PSPLASH_BAR_BORDER_COLOR
 #define PSPLASH_BAR_BORDER_COLOR 0xbb, 0xbb, 0xbb
+#endif
 
 /* This is the color of the space between progress bar and its border */
+#ifndef PSPLASH_BAR_BORDER_SPACE_COLOR
 #define PSPLASH_BAR_BORDER_SPACE_COLOR 0x00, 0x00, 0x00
+#endif
 
 #endif

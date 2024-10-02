@@ -21,14 +21,15 @@
 
 static PSplashConfig default_config =
 {
-	.angle                  = 0,
 	.fbdev_id               = 0,
 	.fbnodb                 = 0,
 	.disable_console_switch = 0,
 	.ignore_msg_cmds        = 0,
 	.enable_bar             = 1,
 	.enable_msg             = 1,
+	.angle                  = PSPLASH_ROTATION,
 	.startup_msg            = PSPLASH_STARTUP_MSG,
+	.image                  = PSPLASH_IMAGE,
 	.img_fullscreen         = PSPLASH_IMG_FULLSCREEN,
 	.img_split_numerator    = PSPLASH_IMG_SPLIT_NUMERATOR,
 	.img_split_denominator  = PSPLASH_IMG_SPLIT_DENOMINATOR,
@@ -50,7 +51,8 @@ static PSplashConfig default_config =
 #if defined(ENABLE_ALIVE_GIF)
 	.alive =
 	{
-		.enable                  = 0,
+		.enable                  = 1,
+		.image                   = PSPLASH_ALIVE_GIF,
 		.animation_mode          = PSPLASH_ALIVE_ANIMATION_MODE_AUTO,
 		.img_v_split_numerator   = PSPLASH_ALIVE_IMG_V_SPLIT_NUMERATOR,
 		.img_v_split_denominator = PSPLASH_ALIVE_IMG_V_SPLIT_DENOMINATOR,
@@ -74,6 +76,11 @@ static inline PSplashColor ul2color(unsigned long ul)
 	return color;
 }
 
+void psplash_uci_init_config()
+{
+	memcpy(&config, &default_config, sizeof(PSplashConfig));
+}
+
 int psplash_uci_read_config(void)
 {
 	struct uci_context *uci_ctx = uci_alloc_context();
@@ -85,9 +92,6 @@ int psplash_uci_read_config(void)
 		uci_free_context(uci_ctx);
 		return -1;
 	}
-
-	/* Set default configuration */
-	memcpy(&config, &default_config, sizeof(PSplashConfig));
 
 	/*
 	 * Configuration

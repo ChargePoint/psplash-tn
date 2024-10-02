@@ -85,6 +85,8 @@ typedef struct PSplashConfig
 
 extern PSplashConfig config;
 
+void psplash_uci_init_config(void);
+
 int psplash_uci_read_config(void);
 
 #endif

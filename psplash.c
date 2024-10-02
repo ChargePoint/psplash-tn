@@ -389,10 +389,10 @@ int main(int argc, char **argv)
 	ulog_threshold(LOG_INFO);
 #endif
 
+	psplash_uci_init_config();
 	if (psplash_uci_read_config())
 	{
-		perror("uci config");
-		exit(-1);
+	    ulog(LOG_INFO, "uci config not found, using defaults\n");
 	}
 
 	signal(SIGHUP, psplash_exit);
@@ -437,12 +437,10 @@ int main(int argc, char **argv)
 		exit(-1);
 	}
 
-	if (psplash_image_read(&image, config.image))
-		exit(-1);
+	psplash_image_read(&image, config.image);
 
 #if defined(ENABLE_ALIVE_GIF)
-	if (psplash_alive_load())
-		exit(-1);
+	psplash_alive_load();
 #endif
 
 	tmpdir = getenv("TMPDIR");
