@@ -63,11 +63,17 @@ INCLUDE_DIRECTORIES(${ubox_include_dir})
 SET(LIBS ${LIBS} ubox)
 
 IF(ENABLE_SYSTEMD)
-    SET(LIBS ${LIBS} systemd)
-    ADD_DEFINITIONS(-DHAVE_SYSTEMD=1)
+	SET(LIBS ${LIBS} systemd)
+	ADD_DEFINITIONS(-DHAVE_SYSTEMD=1)
 	ADD_EXECUTABLE(psplash-systemd psplash-systemd.c)
 	SET_TARGET_PROPERTIES(psplash-systemd PROPERTIES OUTPUT_NAME psplash-systemd)
 	TARGET_LINK_LIBRARIES(psplash-systemd systemd)
+
+	# Install psplash-systemd binary
+	INSTALL(TARGETS psplash-systemd
+			ARCHIVE DESTINATION lib
+			LIBRARY DESTINATION lib
+			RUNTIME DESTINATION bin)
 
 	# Install systemd service files
 	INSTALL(FILES systemd/psplash-systemd.service systemd/psplash-start.service
@@ -78,7 +84,7 @@ ADD_EXECUTABLE(psplash ${PSPLASH_SOURCES})
 SET_TARGET_PROPERTIES(psplash PROPERTIES OUTPUT_NAME psplash)
 TARGET_LINK_LIBRARIES(psplash ${LIBS})
 IF(ENABLE_SYSTEMD)
-    TARGET_LINK_LIBRARIES(psplash systemd)
+	TARGET_LINK_LIBRARIES(psplash systemd)
 ENDIF()
 
 ADD_EXECUTABLE(psplash-write ${PSPLASH_WRITE_SOURCES})
