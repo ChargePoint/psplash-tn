@@ -378,7 +378,7 @@ void psplash_main(PSplashFB *fb, int pipe_fd, int timeout)
 int main(int argc, char **argv)
 {
 	PSplashImage image;
-	char *     tmpdir;
+	char *     rundir;
 	int        pipe_fd, i = 0, ret = 0;
 	PSplashFB *fb;
 
@@ -443,12 +443,12 @@ int main(int argc, char **argv)
 	psplash_alive_load();
 #endif
 
-	tmpdir = getenv("TMPDIR");
+	rundir = getenv("PSPLASH_FIFO_DIR");
 
-	if (!tmpdir)
-		tmpdir = "/tmp";
+	if (!rundir)
+		rundir = "/run";
 
-	chdir(tmpdir);
+	chdir(rundir);
 
 	if (mkfifo(PSPLASH_FIFO, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP))
 	{
